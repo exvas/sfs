@@ -199,3 +199,68 @@ app_license = "MIT"
 # auth_hooks = [
 #	"sfs.auth.validate"
 # ]
+fixtures = [
+    {
+        "doctype": "Custom Field",
+        "filters": [
+            [
+                "name",
+                "in",
+                [
+                    "Employee-nationality",
+                    "Employee-column_break_p64v8",
+                    "Employee-iqama_expiry_date",
+                    "Employee-iqama_id",
+                    "Quotation Item-employee",
+                    "Quotation Item-employee_name",
+                    "Quotation Item-iqama_id",
+                    "Quotation Item-nationality",
+                    "Sales Order Item-employee",
+                    "Sales Order Item-employee_name",
+                    "Sales Order Item-iqama_id",
+                    "Sales Order Item-nationality",
+                    "Sales Invoice Item-employee",
+                    "Sales Invoice Item-employee_name",
+                    "Sales Invoice Item-iqama_id",
+                    "Sales Invoice Item-nationality",
+                    "Sales Invoice-s_date",
+                    "Sales Invoice-e_date",
+                    "Company-address_details",
+                    "Company-address_detail",
+                    "Company-company_name_in_arabic",
+                    "Company-column_break_swag3",
+                    "Company-cr_no",
+                    "Customer-cr_no",
+                    "Sales Invoice-in_words_in_arabic",
+                    "Sales Invoice-bank_details",
+                    "Sales Invoice-bank",
+                    "Sales Invoice-account_name",
+                    "Sales Invoice-bank_name",
+                    "Sales Invoice-column_break_vyb2j",
+                    "Sales Invoice-branch_name",
+                    "Sales Invoice-account_number",
+                    "Sales Invoice-iban_number",
+                    "Sales Invoice Item-hours",
+                    "Quotation Item-type",
+                    "Sales Order Item-type",
+                    "Sales Invoice Item-type",
+                    "Quotation-subject",
+
+				]
+			]
+		]
+	},
+	# {
+	# 	"doctype": "Property Setter",
+	# 	"filters": [
+	# 		[
+	# 			"name",
+	# 			"in",
+	# 			[
+	# 				"Sales Invoice Item-rate-label",
+	# 				"Purchase Invoice Item-rate-label",
+	# 			]
+	# 		]
+	# 	]
+	# }
+]

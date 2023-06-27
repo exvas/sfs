@@ -1,0 +1,104 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "field:account_name",
+ "creation": "2023-06-27 18:32:13.455736",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "account_name",
+  "bank_name",
+  "branch_name",
+  "account_number",
+  "iban_number",
+  "column_break_rv80z",
+  "account_name_in_arabic",
+  "bank_name_in_arabic",
+  "branch_name_in_arabic",
+  "account_number_in_arabic",
+  "iban_number_in_arabic"
+ ],
+ "fields": [
+  {
+   "fieldname": "account_name",
+   "fieldtype": "Data",
+   "label": "Account Name",
+   "unique": 1
+  },
+  {
+   "fieldname": "bank_name",
+   "fieldtype": "Data",
+   "label": "Bank Name"
+  },
+  {
+   "fieldname": "branch_name",
+   "fieldtype": "Data",
+   "label": "Branch Name"
+  },
+  {
+   "fieldname": "account_number",
+   "fieldtype": "Data",
+   "label": "Account Number"
+  },
+  {
+   "fieldname": "iban_number",
+   "fieldtype": "Data",
+   "label": "IBAN Number"
+  },
+  {
+   "fieldname": "column_break_rv80z",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "account_name_in_arabic",
+   "fieldtype": "Data",
+   "label": "Account Name In Arabic"
+  },
+  {
+   "fieldname": "bank_name_in_arabic",
+   "fieldtype": "Data",
+   "label": "Bank Name In Arabic"
+  },
+  {
+   "fieldname": "branch_name_in_arabic",
+   "fieldtype": "Data",
+   "label": "Branch Name in Arabic"
+  },
+  {
+   "fieldname": "account_number_in_arabic",
+   "fieldtype": "Data",
+   "label": "Account Number In Arabic"
+  },
+  {
+   "fieldname": "iban_number_in_arabic",
+   "fieldtype": "Data",
+   "label": "IBAN Number In Arabic"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2023-06-27 18:58:59.762425",
+ "modified_by": "Administrator",
+ "module": "Sfs",
+ "name": "Bank Details",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
