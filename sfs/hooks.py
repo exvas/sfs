@@ -245,6 +245,8 @@ fixtures = [
                     "Sales Order Item-type",
                     "Sales Invoice Item-type",
                     "Quotation-subject",
+                    "Company-company_address_in_arabic",
+                    
 
 				]
 			]
