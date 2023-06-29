@@ -250,7 +250,19 @@ fixtures = [
                     "Purchase Order Item-employee",
                     "Purchase Order Item-nationality",
                     "Purchase Order Item-iqama_id",
-                    "Purchase Order Item-employee_name"
+                    "Purchase Order Item-employee_name",
+                    "Company-tax_id_in_arabic",
+                    "Company-cr_no_in_arabic",
+                    "Customer-tax_id_in_arabic",
+                    "Customer-tax_id_in_arabic",
+                    "Employee-ajeer_no",
+                    "Employee-ajeer_date",
+                    "Employee-visa_no",
+                    "Employee-visa_expiry",
+                    "Employee-medical_insurance_expiry",
+                    "Employee-passport_expiry",
+                    "Purchase Order-subject",
+                    
 
 
 				]
