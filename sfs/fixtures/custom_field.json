@@ -1039,7 +1039,7 @@
   "label": "Service Start Date",
   "length": 0,
   "mandatory_depends_on": null,
-  "modified": "2023-06-28 19:07:47.855878",
+  "modified": "2023-06-29 09:36:27.281657",
   "module": "Sfs",
   "name": "Sales Invoice-s_date",
   "no_copy": 0,
