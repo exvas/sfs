@@ -246,7 +246,11 @@ fixtures = [
                     "Sales Invoice Item-type",
                     "Quotation-subject",
                     "Company-company_address_in_arabic",
-                    "Employee-other_details"
+                    "Employee-other_details",
+                    "Purchase Order Item-employee",
+                    "Purchase Order Item-nationality",
+                    "Purchase Order Item-iqama_id",
+                    "Purchase Order Item-employee_name"
 
 
 				]
