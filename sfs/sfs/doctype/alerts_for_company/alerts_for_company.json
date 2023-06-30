@@ -9,7 +9,32 @@
  "engine": "InnoDB",
  "field_order": [
   "company",
-  "expiry_alert"
+  "section_break_urvsh",
+  "cr_no",
+  "baladiya_no",
+  "absher_no",
+  "qiwa_no",
+  "mudad_no",
+  "waselnational_address_no",
+  "vehicle_insurance_no",
+  "office_rent_ejar_no",
+  "camp_rent_senior_ejar_no",
+  "camp_rent_junior_ejar_no",
+  "company_new_visa",
+  "zakat_no",
+  "column_break_lqihq",
+  "cr_expiry_date",
+  "baladiya_expiry_date",
+  "absher_expiry_date",
+  "qiwa_expiry_date",
+  "mudad_expiry_date",
+  "waselnational_address_expiry_date",
+  "vehicle_insurance_expiry_date",
+  "office_rent_ejar_expiry_date",
+  "camp_rent_senior_ejar_expiry_date",
+  "camp_rent_junior_ejar_expiry_date",
+  "company_new_visa_expiry_date",
+  "zakat_date"
  ],
  "fields": [
   {
@@ -22,15 +47,137 @@
    "unique": 1
   },
   {
-   "fieldname": "expiry_alert",
-   "fieldtype": "Table",
-   "label": "Expiry Alert",
-   "options": "Alert Details"
+   "fieldname": "section_break_urvsh",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "cr_no",
+   "fieldtype": "Data",
+   "label": "CR No"
+  },
+  {
+   "fieldname": "baladiya_no",
+   "fieldtype": "Data",
+   "label": "Baladiya No"
+  },
+  {
+   "fieldname": "absher_no",
+   "fieldtype": "Data",
+   "label": "Absher No"
+  },
+  {
+   "fieldname": "qiwa_no",
+   "fieldtype": "Data",
+   "label": "Qiwa No"
+  },
+  {
+   "fieldname": "mudad_no",
+   "fieldtype": "Data",
+   "label": "Mudad No"
+  },
+  {
+   "fieldname": "waselnational_address_no",
+   "fieldtype": "Data",
+   "label": "Wasel(National Address) No"
+  },
+  {
+   "fieldname": "vehicle_insurance_no",
+   "fieldtype": "Data",
+   "label": "Vehicle Insurance No"
+  },
+  {
+   "fieldname": "office_rent_ejar_no",
+   "fieldtype": "Data",
+   "label": "Office Rent Ejar No"
+  },
+  {
+   "fieldname": "camp_rent_senior_ejar_no",
+   "fieldtype": "Data",
+   "label": "Camp Rent Senior Ejar No"
+  },
+  {
+   "fieldname": "camp_rent_junior_ejar_no",
+   "fieldtype": "Data",
+   "label": "Camp Rent Junior Ejar No"
+  },
+  {
+   "fieldname": "company_new_visa",
+   "fieldtype": "Data",
+   "label": "Company New Visa "
+  },
+  {
+   "fieldname": "zakat_no",
+   "fieldtype": "Data",
+   "label": "Zakat No"
+  },
+  {
+   "fieldname": "column_break_lqihq",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "cr_expiry_date",
+   "fieldtype": "Date",
+   "label": "CR Expiry Date"
+  },
+  {
+   "fieldname": "baladiya_expiry_date",
+   "fieldtype": "Date",
+   "label": "Baladiya Expiry Date"
+  },
+  {
+   "fieldname": "absher_expiry_date",
+   "fieldtype": "Date",
+   "label": "Absher Expiry Date"
+  },
+  {
+   "fieldname": "qiwa_expiry_date",
+   "fieldtype": "Date",
+   "label": "Qiwa Expiry Date"
+  },
+  {
+   "fieldname": "mudad_expiry_date",
+   "fieldtype": "Date",
+   "label": "Mudad Expiry Date"
+  },
+  {
+   "fieldname": "waselnational_address_expiry_date",
+   "fieldtype": "Date",
+   "label": "Wasel(National Address) Expiry Date"
+  },
+  {
+   "fieldname": "vehicle_insurance_expiry_date",
+   "fieldtype": "Date",
+   "label": "Vehicle Insurance Expiry Date"
+  },
+  {
+   "fieldname": "office_rent_ejar_expiry_date",
+   "fieldtype": "Date",
+   "label": "Office Rent Ejar Expiry Date"
+  },
+  {
+   "fieldname": "camp_rent_senior_ejar_expiry_date",
+   "fieldtype": "Date",
+   "label": "Camp Rent Senior Ejar Expiry Date"
+  },
+  {
+   "fieldname": "camp_rent_junior_ejar_expiry_date",
+   "fieldtype": "Date",
+   "label": "Camp Rent Junior Ejar Expiry Date"
+  },
+  {
+   "fieldname": "company_new_visa_expiry_date",
+   "fieldtype": "Date",
+   "label": "Company New Visa Expiry Date"
+  },
+  {
+   "fieldname": "zakat_date",
+   "fieldtype": "Date",
+   "label": "Zakat Date"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2023-06-29 20:44:15.235190",
+ "modified": "2023-06-30 19:32:43.880130",
  "modified_by": "Administrator",
  "module": "Sfs",
  "name": "Alerts for Company",
