@@ -23,8 +23,7 @@
   {
    "fieldname": "account_name",
    "fieldtype": "Data",
-   "label": "Account Name",
-   "unique": 1
+   "label": "Account Name"
   },
   {
    "fieldname": "bank_name",
@@ -79,7 +78,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2023-06-29 20:29:51.178671",
+ "modified": "2023-07-03 18:11:50.504594",
  "modified_by": "Administrator",
  "module": "Sfs",
  "name": "Bank Details",
