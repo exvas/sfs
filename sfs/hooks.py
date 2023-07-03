@@ -262,6 +262,8 @@ fixtures = [
                     "Employee-medical_insurance_expiry",
                     "Employee-passport_expiry",
                     "Purchase Order-subject",
+                    "Sales Invoice-account_number_in_arabic",
+                    "Sales Invoice-iban_number_in_arabic",
                     
 
 
