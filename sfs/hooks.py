@@ -264,6 +264,18 @@ fixtures = [
                     "Purchase Order-subject",
                     "Sales Invoice-account_number_in_arabic",
                     "Sales Invoice-iban_number_in_arabic",
+                    "Supplier-bank_details",
+                    "Supplier-account_name",
+                    "Supplier-bank_name",
+                    "Supplier-branch_name",
+                    "Supplier-account_number",
+                    "Supplier-iban_number",
+                    "Supplier-column_break_ahvja",
+                    "Supplier-account_name_in_arabic",
+                    "Supplier-bank_name_in_arabic",
+                    "Supplier-branch_name_in_arabic",
+                    "Supplier-account_number_in_arabic",
+                    "Supplier-iban_number_in_arabic",
                     
 
 
