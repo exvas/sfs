@@ -29,7 +29,7 @@ app_license = "MIT"
 # page_js = {"page" : "public/js/file.js"}
 
 # include js in doctype views
-# doctype_js = {"doctype" : "public/js/doctype.js"}
+doctype_js = {"Sales Invoice" : "public/js/sales_invoice.js"}
 # doctype_list_js = {"doctype" : "public/js/doctype_list.js"}
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
 # doctype_calendar_js = {"doctype" : "public/js/doctype_calendar.js"}
@@ -276,6 +276,28 @@ fixtures = [
                     "Supplier-branch_name_in_arabic",
                     "Supplier-account_number_in_arabic",
                     "Supplier-iban_number_in_arabic",
+                    "Quotation Item-reference_type",
+                    "Quotation Item-staff_nationality",
+                    "Quotation Item-staff_iqama_id",
+                    "Quotation Item-staff_name",
+                    "Quotation Item-staff",
+                    "Sales Order Item-reference_type",
+                    "Sales Order Item-staff",
+                    "Sales Order Item-staff_nationality",
+                    "Sales Order Item-staff_iqama_id",
+                    "Sales Order Item-staff_name",
+                    "Sales Invoice Item-reference_type",
+                    "Sales Invoice Item-staff",
+                    "Sales Invoice Item-staff_nationality",
+                    "Sales Invoice Item-staff_iqama_id",
+                    "Sales Invoice Item-staff_name",
+                    "Purchase Order Item-reference_type",
+                    "Purchase Order Item-staff",
+                    "Purchase Order Item-staff_nationallity",
+                    "Purchase Order Item-staff_iqama_id",
+                    "Purchase Order Item-staff_name",
+                    "Sales Invoice-project_name",
+                    "Customer-cr_no_in_arabic"
                     
 
 
