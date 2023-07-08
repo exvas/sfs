@@ -29,7 +29,11 @@ frappe.ui.form.on("Sales Invoice", {
                             items[i].iqama_id=r.message[0].iq_id,
                             items[i].nationality=r.message[0].nation,
                             items[i].staff_iqama_id=r.message[0].s_iq_id,
-                            items[i].staff_nationality=r.message[0].s_nation
+                            items[i].staff_nationality=r.message[0].s_nation,
+                            items[i].item_name=r.message[0].item_name,
+                            items[i].uom=r.message[0].uom,
+                            items[i].qty=1,
+                            items[i].conversion_factor=1
 
                         }
                     }
@@ -38,8 +42,43 @@ frappe.ui.form.on("Sales Invoice", {
             })
             
         }
+        cur_frm.add_custom_button(__('Timesy'),
+        function() {
+            var query_args = {
+                query:"sfs.doc_events.sales_invoice.get_staffing",
+                filters: {
+        doctype: cur_frm.doc.doctype
+                }
+            }
+                var d = new frappe.ui.form.MultiSelectDialog({
+                        doctype: "Timesy",
+                        target: cur_frm,
+                        setters: {
+                            staffing_type: "",
+                            customer_name: null,
+                            employee_name: null,
+                            start_date: null,
+                        },
+                        date_field: "start_date",
+                        get_query() {
+                            return query_args;
+                        },
+                        action(selections) {
+                            console.log(selections)
+                            console.log("sfs executed")
+                            add_timesy(selections, cur_frm)
+                            console.log("dates")
+                            
+                            add_dates(selections,cur_frm)
+                            console.log("items")
+                            get_items(selections,cur_frm)
+                            d.dialog.hide()
+                        }
+                    });
+}, __("Get Items From"), "btn-default");
     },
     refresh: function () {
+        console.log('done')
         frappe.call({
             method: "sfs.doc_events.sales_invoice.get_timesies",
             args: {doctype: "Sales Invoice"},
@@ -78,8 +117,12 @@ frappe.ui.form.on("Sales Invoice", {
                                 },
                                 action(selections) {
                                     console.log(selections)
+                                    console.log("sfs executed")
                                     add_timesy(selections, cur_frm)
+                                    console.log("dates")
+                                    
                                     add_dates(selections,cur_frm)
+                                    console.log("items")
                                     get_items(selections,cur_frm)
                                     d.dialog.hide()
                                 }
@@ -117,6 +160,7 @@ function add_timesy(selections, cur_frm) {
                 name: selections
             },
             callback: function (r) {
+                console.log("yess.................")
                 for(var x=0;x<r.message.length;x+=1){
                     cur_frm.add_child("timesy_list", {
                         timesy: r.message[x].name,
@@ -125,6 +169,9 @@ function add_timesy(selections, cur_frm) {
                         total_costing_rate: r.message[x].total_costing_hour,
                     })
                     cur_frm.refresh_field("timesy_list")
+                    add_dates(selections,cur_frm)
+                    console.log("items")
+                    get_items(selections,cur_frm)
                     compute_grand_costing(cur_frm)
                 }
             }
@@ -172,7 +219,7 @@ function add_dates(selections, cur_frm) {
 
 
 function get_items(selections, cur_frm) {
-
+    console.log("get items")
     frappe.call({
         method: "sfs.doc_events.sales_invoice.get_item_details",
         args: {
@@ -195,7 +242,11 @@ function get_items(selections, cur_frm) {
                     iqama_id:r.message[x].iq_id,
                     nationality:r.message[x].nation,
                     staff_iqama_id:r.message[x].s_iq_id,
-                    staff_nationality:r.message[x].s_nation
+                    staff_nationality:r.message[x].s_nation,
+                    item_name:r.message[x].item_name,
+                    uom:r.message[x].uom,
+                    qty:1,
+                    conversion_factor:1
                 })
                 cur_frm.refresh_field("items")
                 // compute_grand_costing(cur_frm)

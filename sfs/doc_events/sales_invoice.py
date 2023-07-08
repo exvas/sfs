@@ -94,7 +94,7 @@ def get_dates(name):
 
 @frappe.whitelist()
 def get_timesy_dates(name):
-    datas = frappe.db.sql(""" SELECT start_date,end_date,employee_code,employee_name,staff_code,staff_name,reference_type FROM `tabTimesy` WHERE name=%s""", name, as_dict=1)
+    datas = frappe.db.sql(""" SELECT item,start_date,end_date,employee_code,employee_name,staff_code,staff_name,reference_type FROM `tabTimesy` WHERE name=%s""", name, as_dict=1)
     for i in datas:
         s_iq_id=''
         s_nat = ''
@@ -115,6 +115,13 @@ def get_timesy_dates(name):
             i.update(s_i_id)
             s_nat ={"s_nation":s_nation}
             i.update(s_nat)
+        if i.item:
+            i_name = frappe.db.get_value("Item",i.item,"item_name")
+            item_name = {"item_name":i_name}
+            i.update(item_name)
+            s_uom = frappe.db.get_value("Item",i.item,"stock_uom")
+            uom = {"uom":s_uom}
+            i.update(uom)
     return datas
 
     
@@ -146,4 +153,11 @@ def get_item_details(name):
             i.update(s_i_id)
             s_nat ={"s_nation":s_nation}
             i.update(s_nat)
+        if i.item:
+            i_name = frappe.db.get_value("Item",i.item,"item_name")
+            item_name = {"item_name":i_name}
+            i.update(item_name)
+            s_uom = frappe.db.get_value("Item",i.item,"stock_uom")
+            uom = {"uom":s_uom}
+            i.update(uom)
     return items
