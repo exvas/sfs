@@ -297,7 +297,8 @@ fixtures = [
                     "Purchase Order Item-staff_iqama_id",
                     "Purchase Order Item-staff_name",
                     "Sales Invoice-project_name",
-                    "Customer-cr_no_in_arabic"
+                    "Customer-cr_no_in_arabic",
+                    "Sales Invoice Item-total_working_hour",
                     
 
 

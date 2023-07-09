@@ -93,8 +93,9 @@ def get_dates(name):
     return dates
 
 @frappe.whitelist()
-def get_timesy_dates(name):
-    datas = frappe.db.sql(""" SELECT item,start_date,end_date,employee_code,employee_name,staff_code,staff_name,reference_type FROM `tabTimesy` WHERE name=%s""", name, as_dict=1)
+def get_timesy_dates(name,company):
+    datas = frappe.db.sql(""" SELECT item,total_working_hour,total_costing_hour,start_date,end_date,employee_code,
+    employee_name,staff_code,staff_name,reference_type FROM `tabTimesy` WHERE name=%s""", name, as_dict=1)
     for i in datas:
         s_iq_id=''
         s_nat = ''
@@ -122,16 +123,23 @@ def get_timesy_dates(name):
             s_uom = frappe.db.get_value("Item",i.item,"stock_uom")
             uom = {"uom":s_uom}
             i.update(uom)
+            desc = frappe.db.get_value("Item",i.item,"description")
+            desc = {"description":desc}
+            i.update(desc)
+            i_acc = frappe.db.sql("""select income_account from `tabItem Default` where parent=%s and company=%s""",(i.item,company),as_dict=1 )
+            if i_acc:
+                income_account = {"income_account":i_acc[0].income_account}
+                i.update(income_account)
     return datas
 
     
 @frappe.whitelist()
-def get_item_details(name):
+def get_item_details(name,company):
     data = json.loads(name)
     items = []
 
     for i in data:
-        items += frappe.db.sql(""" SELECT item,reference_type,employee_code,employee_name,staff_code,staff_name FROM `tabTimesy` WHERE name=%s""", i, as_dict=1)
+        items += frappe.db.sql(""" SELECT item,total_working_hour,total_costing_hour,reference_type,employee_code,employee_name,staff_code,staff_name FROM `tabTimesy` WHERE name=%s""", i, as_dict=1)
 
     for i in items:
         s_iq_id=''
@@ -160,4 +168,11 @@ def get_item_details(name):
             s_uom = frappe.db.get_value("Item",i.item,"stock_uom")
             uom = {"uom":s_uom}
             i.update(uom)
+            desc = frappe.db.get_value("Item",i.item,"description")
+            desc = {"description":desc}
+            i.update(desc)
+            i_acc = frappe.db.sql("""select income_account from `tabItem Default` where parent=%s and company=%s""",(i.item,company),as_dict=1 )
+            if i_acc:
+                income_account = {"income_account":i_acc[0].income_account}
+                i.update(income_account)
     return items
