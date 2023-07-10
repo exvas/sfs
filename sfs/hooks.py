@@ -299,6 +299,11 @@ fixtures = [
                     "Sales Invoice-project_name",
                     "Customer-cr_no_in_arabic",
                     "Sales Invoice Item-total_working_hour",
+                    "Sales Invoice Item-hourly_rate",
+                    "Sales Invoice-hourly_invoice",
+                    "Sales Invoice Item-timesy_rate",
+                    "Sales Invoice-absent_deduction",
+                    'Sales Invoice-new_doc',
                     
 
 

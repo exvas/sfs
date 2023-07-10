@@ -130,6 +130,13 @@ def get_timesy_dates(name,company):
             if i_acc:
                 income_account = {"income_account":i_acc[0].income_account}
                 i.update(income_account)
+            price = frappe.db.sql("""select price_list_rate from `tabItem Price` where item_code=%s and price_list='Standard Selling' order by valid_from desc limit 1""",i.item,as_dict=1)
+            if price:
+                rate = {"price_list_rate":price[0].price_list_rate}
+                i.update(rate)
+            else:
+                rate = {"price_list_rate":0}
+                i.update(rate)
     return datas
 
     
@@ -175,4 +182,13 @@ def get_item_details(name,company):
             if i_acc:
                 income_account = {"income_account":i_acc[0].income_account}
                 i.update(income_account)
+
+            price = frappe.db.sql("""select price_list_rate from `tabItem Price` where item_code=%s and price_list='Standard Selling' order by valid_from desc limit 1""",i.item,as_dict=1)
+            if price:
+                rate = {"price_list_rate":price[0].price_list_rate}
+                i.update(rate)
+            else:
+                rate = {"price_list_rate":0}
+                i.update(rate)
+
     return items

@@ -1,7 +1,7 @@
 frappe.ui.form.on("Sales Invoice", {
     onload_post_render:function(frm){
         console.log("onload")
-        if (frm.is_new){
+        if (frm.doc.new_doc==0){
             if(cur_frm.doc.timesy_list && cur_frm.doc.company){
                 frappe.call({
                     method: "sfs.doc_events.sales_invoice.get_timesy_dates",
@@ -17,7 +17,7 @@ frappe.ui.form.on("Sales Invoice", {
                         if(! cur_frm.doc.e_date){
                             cur_frm.set_value("e_date",r.message[0].end_date)
                         }
-                        if (cur_frm.doc.items){
+                        if (cur_frm.doc.items && cur_frm.doc.hourly_invoice==0){
                             var items = cur_frm.doc.items
                             for (var i=0;i<items.length;i++){
                                 items[i].reference_type=r.message[0].reference_type
@@ -36,11 +36,43 @@ frappe.ui.form.on("Sales Invoice", {
                                 items[i].uom=r.message[0].uom,
                                 items[i].qty=1,
                                 items[i].rate=r.message[0].total_costing_hour,
+                                items[i].timesy_rate=r.message[0].total_costing_hour,
                                 items[i].amount=r.message[0].total_costing_hour*1,
                                 items[i].total_working_hour=r.message[0].total_working_hour,
                                 items[i].conversion_factor=1,
                                 items[i].description=r.message[0].description,
-                                items[i].income_account = r.message[0].income_account
+                                items[i].income_account = r.message[0].income_account,
+                                items[i].hourly_rate = r.message[0].price_list_rate
+
+
+                            }
+                        }
+                        if (cur_frm.doc.items && cur_frm.doc.hourly_invoice==1){
+                            var items = cur_frm.doc.items
+                            for (var i=0;i<items.length;i++){
+                                items[i].reference_type=r.message[0].reference_type
+                                items[i].employee=r.message[0].employee_code
+
+                                items[i].employee_name=r.message[0].employee_name
+                                items[i].staff=r.message[0].staff_code
+
+                                items[i].staff_name=r.message[0].staff_name
+
+                                items[i].iqama_id=r.message[0].iq_id,
+                                items[i].nationality=r.message[0].nation,
+                                items[i].staff_iqama_id=r.message[0].s_iq_id,
+                                items[i].staff_nationality=r.message[0].s_nation,
+                                items[i].item_name=r.message[0].item_name,
+                                items[i].uom=r.message[0].uom,
+                                items[i].qty=1,
+                                items[i].rate= r.message[0].hourly_rate * r.message[0].total_working_hour,
+                                items[i].timesy_rate=r.message[0].total_costing_hour,
+                                items[i].amount=r.message[0].hourly_rate * r.message[0].total_working_hour * items[i].qty,
+                                items[i].total_working_hour=r.message[0].total_working_hour,
+                                items[i].conversion_factor=1,
+                                items[i].description=r.message[0].description,
+                                items[i].income_account = r.message[0].income_account,
+                                items[i].hourly_rate = r.message[0].price_list_rate
 
 
                             }
@@ -84,7 +116,7 @@ frappe.ui.form.on("Sales Invoice", {
                             d.dialog.hide()
                         }
                     });
-}, __("Get Items From"), "btn-default");
+    }, __("Get Items From"), "btn-default");
     },
     refresh: function () {
         console.log('done')
@@ -137,6 +169,32 @@ frappe.ui.form.on("Sales Invoice", {
                                 }
                             });
         }, __("Get Items From"), "btn-default");
+    },
+    hourly_invoice:function(frm){
+        if(cur_frm.doc.hourly_invoice==1){
+            var items = cur_frm.doc.items
+            for(var i=0 ; i<items.length ; i++){
+                let r = items[i].hourly_rate*items[i].total_working_hour
+                items[i].rate = r
+                items[i].amount = r * items[i].qty
+
+            }
+            cur_frm.refresh_field("items")
+        }
+        if(cur_frm.doc.hourly_invoice==0){
+            var items = cur_frm.doc.items
+            for(var i=0 ; i<items.length ; i++){
+                let r = items[i].timesy_rate
+                items[i].rate = r
+                items[i].amount = r * items[i].qty
+
+            }
+            cur_frm.refresh_field("items")
+
+        }
+    },
+    validate:function(frm){
+        frm.set_value("new_doc",1)
     }
     
 })
@@ -260,10 +318,12 @@ function get_items(selections, cur_frm) {
                     uom:r.message[x].uom,
                     qty:1,
                     rate:r.message[x].total_costing_hour,
+                    timesy_rate:r.message[x].total_costing_hour,
                     amount:r.message[x].total_costing_hour*1,
                     total_working_hour:r.message[x].total_working_hour,
                     conversion_factor:1,
                     income_account:r.message[x].income_account,
+                    hourly_rate:r.message[x].price_list_rate
                 })
                 cur_frm.refresh_field("items")
                 // compute_grand_costing(cur_frm)
