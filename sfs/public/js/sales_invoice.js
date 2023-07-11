@@ -110,9 +110,9 @@ frappe.ui.form.on("Sales Invoice", {
                             add_timesy(selections, cur_frm)
                             console.log("dates")
                             
-                            add_dates(selections,cur_frm)
-                            console.log("items")
-                            get_items(selections,cur_frm)
+                            // add_dates(selections,cur_frm)
+                            // console.log("items")
+                            // get_items(selections,cur_frm)
                             d.dialog.hide()
                         }
                     });
@@ -238,11 +238,12 @@ function add_timesy(selections, cur_frm) {
                         total_costing_rate: r.message[x].total_costing_hour,
                     })
                     cur_frm.refresh_field("timesy_list")
-                    add_dates(selections,cur_frm)
-                    console.log("items")
-                    get_items(selections,cur_frm)
+                    
                     compute_grand_costing(cur_frm)
                 }
+                add_dates(selections,cur_frm)
+                console.log("items")
+                get_items(selections,cur_frm)
             }
         })
 }
@@ -296,11 +297,14 @@ function get_items(selections, cur_frm) {
             company:cur_frm.doc.company
         },
         callback: function (r) {
+            console.log("hiiii")
+            console.log(r.message)
             for(var i=0;i<cur_frm.doc.items.length;i+=1){
                 if(!cur_frm.doc.items[i].item_code){
                     cur_frm.clear_table("items")
                 }
             }
+            cur_frm.set_value("hourly_invoice",1)
             for(var x=0;x<r.message.length;x+=1){
                 cur_frm.add_child("items", {
                     item_code: r.message[x].item,
@@ -317,9 +321,9 @@ function get_items(selections, cur_frm) {
                     item_name:r.message[x].item_name,
                     uom:r.message[x].uom,
                     qty:1,
-                    rate:r.message[x].total_costing_hour,
+                    rate:r.message[x].total_working_hour*r.message[x].price_list_rate,
                     timesy_rate:r.message[x].total_costing_hour,
-                    amount:r.message[x].total_costing_hour*1,
+                    amount:r.message[x].total_working_hour*r.message[x].price_list_rate*1,
                     total_working_hour:r.message[x].total_working_hour,
                     conversion_factor:1,
                     income_account:r.message[x].income_account,

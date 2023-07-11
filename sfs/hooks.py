@@ -303,7 +303,8 @@ fixtures = [
                     "Sales Invoice-hourly_invoice",
                     "Sales Invoice Item-timesy_rate",
                     "Sales Invoice-absent_deduction",
-                    'Sales Invoice-new_doc',
+                    "Sales Invoice-new_doc",
+                    "Supplier-cr_no",
                     
 
 
