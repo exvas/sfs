@@ -29,7 +29,8 @@ app_license = "MIT"
 # page_js = {"page" : "public/js/file.js"}
 
 # include js in doctype views
-doctype_js = {"Sales Invoice" : "public/js/sales_invoice.js"}
+doctype_js = {"Sales Invoice" : "public/js/sales_invoice.js",
+            "Timesy" : "public/js/timesy.js"}
 # doctype_list_js = {"doctype" : "public/js/doctype_list.js"}
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
 # doctype_calendar_js = {"doctype" : "public/js/doctype_calendar.js"}
@@ -307,6 +308,7 @@ fixtures = [
                     "Supplier-cr_no",
                     "Sales Invoice-section_break_hjdwt",
                     "Sales Invoice-po_details",
+                    "Timesy-ppe_deduction",
                     
 
 
