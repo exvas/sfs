@@ -305,6 +305,8 @@ fixtures = [
                     "Sales Invoice-absent_deduction",
                     "Sales Invoice-new_doc",
                     "Supplier-cr_no",
+                    "Sales Invoice-section_break_hjdwt",
+                    "Sales Invoice-po_details",
                     
 
 
