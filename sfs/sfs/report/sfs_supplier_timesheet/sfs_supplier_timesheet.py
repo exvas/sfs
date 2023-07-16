@@ -61,7 +61,7 @@ def execute(filters=None):
 					WHERE MONTH(T.start_date) {3} and YEAR(T.start_date) = '{4}' {5}""".format(fields,type,inner_join_filter,final_months,filters.get("fiscal_year"),condition)
 		print(query)
 		data += frappe.db.sql(query, as_dict=1)
-		total_amount = total_absent = total_absent_deduction = total_deduction = total_ded = 0
+		total_amount = total_absent = total_absent_deduction = total_ded = 0
 		for x in data:
 			print("xxxxxxxxxxxxxxxxxxxxxxxx")
 			print(x)
@@ -103,7 +103,7 @@ def execute(filters=None):
 			total_absent_deduction += absent * x.absent_deduction_per_hour + x.ppe_deduction
 		if len(data) > 0:
 			print('total')
-			print(total_amount)
+			print(total_absent_deduction)
 			data[len(data)-1]['total_amount'] = total_amount
 			data[len(data)-1]['total_absent'] = total_absent
 			data[len(data)-1]['subtotal_without_vat_1'] = total_amount - total_absent
