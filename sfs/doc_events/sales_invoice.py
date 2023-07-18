@@ -79,6 +79,9 @@ def get_timesy(name):
 
     for i in data:
         timesies += frappe.db.sql(""" SELECT * FROM `tabTimesy` WHERE name=%s""", i, as_dict=1)
+    ded = 0
+
+
     return timesies
 
 
@@ -94,7 +97,7 @@ def get_dates(name):
 
 @frappe.whitelist()
 def get_timesy_dates(name,company):
-    datas = frappe.db.sql(""" SELECT item,total_working_hour,total_costing_hour,start_date,end_date,employee_code,
+    datas = frappe.db.sql(""" SELECT item,total_working_hour,total_deduction,total_costing_rate_before_deduction,total_costing_hour,start_date,end_date,employee_code,
     employee_name,staff_code,staff_name,reference_type FROM `tabTimesy` WHERE name=%s""", name, as_dict=1)
     for i in datas:
         s_iq_id=''
@@ -146,7 +149,7 @@ def get_item_details(name,company):
     items = []
 
     for i in data:
-        items += frappe.db.sql(""" SELECT item,total_working_hour,total_costing_hour,reference_type,employee_code,employee_name,staff_code,staff_name FROM `tabTimesy` WHERE name=%s""", i, as_dict=1)
+        items += frappe.db.sql(""" SELECT item,total_working_hour,total_costing_rate_before_deduction,total_costing_hour,reference_type,employee_code,employee_name,staff_code,staff_name FROM `tabTimesy` WHERE name=%s""", i, as_dict=1)
 
     for i in items:
         s_iq_id=''
