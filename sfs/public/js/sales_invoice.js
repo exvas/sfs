@@ -14,6 +14,8 @@ frappe.ui.form.on("Sales Invoice", {
                             cur_frm.set_value("s_date",r.message[0].start_date)
                             
                         }
+                        console.log("onload woking")
+                        cur_frm.set_value("additional_amount",r.message[0].charge_amount)
                         if(! cur_frm.doc.e_date){
                             cur_frm.set_value("e_date",r.message[0].end_date)
                         }
@@ -247,7 +249,14 @@ function add_timesy(selections, cur_frm) {
                 for(var x=0;x<r.message.length;x+=1){
                     d += r.message[x].total_deduction
                 }
+                var a = 0
+                for(var s=0;s<r.message.length;s+=1){
+                    a += r.message[s].charge_amount
+                }
                 cur_frm.set_value("discount_amount",d)
+                console.log("aaaaaa")
+                console.log(a)
+                cur_frm.set_value("additional_amount",a)
 
                 add_dates(selections,cur_frm)
                 console.log("items")

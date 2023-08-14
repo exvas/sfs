@@ -308,6 +308,8 @@ fixtures = [
                     "Supplier-cr_no",
                     "Sales Invoice-section_break_hjdwt",
                     "Sales Invoice-po_details",
+                    "Sales Invoice-additional_amount",
+                    "Sales Invoice-additional"
                     # "Timesy-ppe_deduction",
                     
 

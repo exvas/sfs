@@ -97,8 +97,9 @@ def get_dates(name):
 
 @frappe.whitelist()
 def get_timesy_dates(name,company):
+    print("*****************")
     datas = frappe.db.sql(""" SELECT item,total_working_hour,total_deduction,total_costing_rate_before_deduction,total_costing_hour,start_date,end_date,employee_code,
-    employee_name,staff_code,staff_name,reference_type FROM `tabTimesy` WHERE name=%s""", name, as_dict=1)
+    employee_name,staff_code,staff_name,reference_type,charge_amount FROM `tabTimesy` WHERE name=%s""", name, as_dict=1)
     for i in datas:
         s_iq_id=''
         s_nat = ''
