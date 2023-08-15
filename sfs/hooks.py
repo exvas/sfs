@@ -309,7 +309,9 @@ fixtures = [
                     "Sales Invoice-section_break_hjdwt",
                     "Sales Invoice-po_details",
                     "Sales Invoice-additional_amount",
-                    "Sales Invoice-additional"
+                    "Sales Invoice-additional",
+                    "Sales Invoice-use_manual_in_words",
+                    "Sales Invoice-manual_in_words",
                     # "Timesy-ppe_deduction",
                     
 
