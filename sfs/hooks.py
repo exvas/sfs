@@ -30,7 +30,8 @@ app_license = "MIT"
 
 # include js in doctype views
 doctype_js = {"Sales Invoice" : "public/js/sales_invoice.js",
-            "Timesy" : "public/js/timesy.js"}
+            "Timesy" : "public/js/timesy.js",
+            "Purchase Invoice" : "public/js/purchase_invoice.js"}
 # doctype_list_js = {"doctype" : "public/js/doctype_list.js"}
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
 # doctype_calendar_js = {"doctype" : "public/js/doctype_calendar.js"}
@@ -312,6 +313,19 @@ fixtures = [
                     "Sales Invoice-additional",
                     "Sales Invoice-use_manual_in_words",
                     "Sales Invoice-manual_in_words",
+                    "Purchase Invoice Item-custom_reference_type",
+                    "Purchase Invoice Item-custom_employee",
+                    "Purchase Invoice Item-custom_staff",
+                    "Purchase Invoice Item-custom_employee_name",
+                    "Purchase Invoice Item-custom_staff_name",
+                    "Purchase Invoice Item-custom_iqama_id",
+                    "Purchase Invoice Item-custom_staff_iqama_id",
+                    "Purchase Invoice Item-custom_nationality",
+                    "Purchase Invoice Item-custom_staff_nationality",
+                    "Purchase Invoice Item-custom_type",
+                    "Purchase Invoice Item-custom_total_working_hour",
+                    "Purchase Invoice Item-custom_hourly_rate",
+                    
                     # "Timesy-ppe_deduction",
                     
 
