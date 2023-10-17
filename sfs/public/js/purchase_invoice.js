@@ -1,4 +1,33 @@
 frappe.ui.form.on("Purchase Invoice", {
+    refresh:function(frm){
+        cur_frm.add_custom_button(__('Fetch from Timesy'),
+				function() {
+                    var query_args = {
+                       query:"sfs.doc_events.purchase_invoice.get_staffing",
+                        filters: {doctype: cur_frm.doc.doctype}
+                    }
+					 var d = new frappe.ui.form.MultiSelectDialog({
+                                doctype: "Timesy",
+                                target: cur_frm,
+                                setters: {
+                                    staffing_type: "",
+                                    employee_name: null,
+                                    supplier_name: null,
+                                    start_date: null,
+                                },
+                                date_field: "start_date",
+                                get_query() {
+                                    return query_args;
+                                },
+                                action(selections) {
+                                    add_items(selections, cur_frm)
+                                    d.dialog.hide()
+                                }
+                            });
+        }, __("Get Items From"), "btn-default");
+
+    },
+    
     onload_post_render:function(frm){
         console.log("hi")
         if(frm.doc.timesy_list){
@@ -51,31 +80,7 @@ frappe.ui.form.on("Purchase Invoice", {
         
 
 
-        cur_frm.add_custom_button(__('Fetch from Timesy'),
-				function() {
-                    var query_args = {
-                       query:"sfs.doc_events.purchase_invoice.get_staffing",
-                        filters: {doctype: cur_frm.doc.doctype}
-                    }
-					 var d = new frappe.ui.form.MultiSelectDialog({
-                                doctype: "Timesy",
-                                target: cur_frm,
-                                setters: {
-                                    staffing_type: "",
-                                    employee_name: null,
-                                    supplier_name: null,
-                                    start_date: null,
-                                },
-                                date_field: "start_date",
-                                get_query() {
-                                    return query_args;
-                                },
-                                action(selections) {
-                                    add_items(selections, cur_frm)
-                                    d.dialog.hide()
-                                }
-                            });
-        }, __("Get Items From"), "btn-default");
+        
 
     }
 })
