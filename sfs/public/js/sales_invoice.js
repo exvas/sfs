@@ -27,7 +27,7 @@ frappe.ui.form.on("Sales Invoice", {
 
                                 items[i].employee_name=r.message[0].employee_name
                                 items[i].staff=r.message[0].staff_code
-
+                                items[i].custom_timesy = r.message[0].name
                                 items[i].staff_name=r.message[0].staff_name
 
                                 items[i].iqama_id=r.message[0].iq_id,
@@ -44,7 +44,7 @@ frappe.ui.form.on("Sales Invoice", {
                                 items[i].conversion_factor=1,
                                 items[i].description=r.message[0].description,
                                 items[i].income_account = r.message[0].income_account,
-                                items[i].hourly_rate = r.message[0].price_list_rate
+                                items[i].hourly_rate = r.message[0].hourly_rate
 
 
                             }
@@ -59,7 +59,7 @@ frappe.ui.form.on("Sales Invoice", {
                                 items[i].staff=r.message[0].staff_code
 
                                 items[i].staff_name=r.message[0].staff_name
-
+                                items[i].custom_timesy = r.message[0].name
                                 items[i].iqama_id=r.message[0].iq_id,
                                 items[i].nationality=r.message[0].nation,
                                 items[i].staff_iqama_id=r.message[0].s_iq_id,
@@ -67,7 +67,7 @@ frappe.ui.form.on("Sales Invoice", {
                                 items[i].item_name=r.message[0].item_name,
                                 items[i].uom=r.message[0].uom,
                                 items[i].qty=1,
-                                items[i].hourly_rate = r.message[0].price_list_rate,
+                                items[i].hourly_rate = r.message[0].hourly_rate,
                                 items[i].rate= r.message[0].price_list_rate * r.message[0].total_working_hour,
                                 items[i].timesy_rate=r.message[0].total_costing_rate_before_deduction,
                                 items[i].amount=r.message[0].price_list_rate * r.message[0].total_working_hour * items[i].qty,
@@ -327,6 +327,7 @@ function get_items(selections, cur_frm) {
                     item_code: r.message[x].item,
                     description:r.message[x].description,
                     reference_type:r.message[x].reference_type,
+                    custom_timesy:r.message[x].name,
                     staff:r.message[x].staff_code,
                     staff_name:r.message[x].staff_name,
                     employee:r.message[x].employee_code,
@@ -344,7 +345,7 @@ function get_items(selections, cur_frm) {
                     total_working_hour:r.message[x].total_working_hour,
                     conversion_factor:1,
                     income_account:r.message[x].income_account,
-                    hourly_rate:r.message[x].price_list_rate
+                    hourly_rate:r.message[x].hourly_rate
                 })
                 cur_frm.refresh_field("items")
                 // compute_grand_costing(cur_frm)

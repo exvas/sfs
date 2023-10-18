@@ -325,6 +325,10 @@ fixtures = [
                     "Purchase Invoice Item-custom_type",
                     "Purchase Invoice Item-custom_total_working_hour",
                     "Purchase Invoice Item-custom_hourly_rate",
+                    "Purchase Invoice Item-custom_timesy",
+                    "Sales Invoice Item-custom_timesy",
+                    "Purchase Invoice-custom_hourly_invoice",
+                    "Purchase Invoice Item-custom_timesy_rate",
                     
                     # "Timesy-ppe_deduction",
                     

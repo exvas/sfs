@@ -30,7 +30,7 @@ def get_staffing(doctype, target,setters,d,e,filters):
     print(e)
     print(filters)
     data = []
-    condition = ""
+    condition = "" 
     if target:
         condition += " and (name like '%{0}%') ".format(target)
 
@@ -98,7 +98,7 @@ def get_dates(name):
 @frappe.whitelist()
 def get_timesy_dates(name,company):
     print("*****************")
-    datas = frappe.db.sql(""" SELECT item,total_working_hour,total_deduction,total_costing_rate_before_deduction,total_costing_hour,start_date,end_date,employee_code,
+    datas = frappe.db.sql(""" SELECT name,item,total_working_hour,total_deduction,total_costing_rate_before_deduction,total_costing_hour,start_date,end_date,employee_code,
     employee_name,staff_code,staff_name,reference_type,charge_amount FROM `tabTimesy` WHERE name=%s""", name, as_dict=1)
     for i in datas:
         s_iq_id=''
@@ -112,6 +112,13 @@ def get_timesy_dates(name,company):
             i.update(i_id)
             nat ={"nation":nation}
             i.update(nat)
+            price = frappe.db.sql("""select default_cost_rate_per_hour from `tabStaffing Cost` where employee_code=%s and status='Active'""",i.employee_code,as_dict=1)
+            if price:
+                rate = {"hourly_rate":price[0].default_cost_rate_per_hour}
+                i.update(rate)
+            else:
+                rate = {"hourly_rate":0}
+                i.update(rate)
         if i.staff_code:
             
             s_iq_id = frappe.db.get_value("Staff",i.staff_code,"iqama_number") 
@@ -120,6 +127,13 @@ def get_timesy_dates(name,company):
             i.update(s_i_id)
             s_nat ={"s_nation":s_nation}
             i.update(s_nat)
+            price = frappe.db.sql("""select default_cost_rate_per_hour from `tabStaffing Cost` where staff_code=%s and status='Active'""",i.staff_code,as_dict=1)
+            if price:
+                rate = {"hourly_rate":price[0].default_cost_rate_per_hour}
+                i.update(rate)
+            else:
+                rate = {"hourly_rate":0}
+                i.update(rate)
         if i.item:
             i_name = frappe.db.get_value("Item",i.item,"item_name")
             item_name = {"item_name":i_name}
@@ -134,13 +148,7 @@ def get_timesy_dates(name,company):
             if i_acc:
                 income_account = {"income_account":i_acc[0].income_account}
                 i.update(income_account)
-            price = frappe.db.sql("""select price_list_rate from `tabItem Price` where item_code=%s and price_list='Standard Selling' order by valid_from desc limit 1""",i.item,as_dict=1)
-            if price:
-                rate = {"price_list_rate":price[0].price_list_rate}
-                i.update(rate)
-            else:
-                rate = {"price_list_rate":0}
-                i.update(rate)
+           
     return datas
 
     
@@ -150,7 +158,7 @@ def get_item_details(name,company):
     items = []
 
     for i in data:
-        items += frappe.db.sql(""" SELECT item,total_working_hour,total_costing_rate_before_deduction,total_costing_hour,reference_type,employee_code,employee_name,staff_code,staff_name FROM `tabTimesy` WHERE name=%s""", i, as_dict=1)
+        items += frappe.db.sql(""" SELECT name,item,total_working_hour,total_costing_rate_before_deduction,total_costing_hour,reference_type,employee_code,employee_name,staff_code,staff_name FROM `tabTimesy` WHERE name=%s""", i, as_dict=1)
 
     for i in items:
         s_iq_id=''
@@ -164,6 +172,13 @@ def get_item_details(name,company):
             i.update(i_id)
             nat ={"nation":nation}
             i.update(nat)
+            price = frappe.db.sql("""select default_cost_rate_per_hour from `tabStaffing Cost` where employee_code=%s and status='Active'""",i.employee_code,as_dict=1)
+            if price:
+                rate = {"hourly_rate":price[0].default_cost_rate_per_hour}
+                i.update(rate)
+            else:
+                rate = {"hourly_rate":0}
+                i.update(rate)
         if i.staff_code:
             
             s_iq_id = frappe.db.get_value("Staff",i.staff_code,"iqama_number") 
@@ -172,6 +187,13 @@ def get_item_details(name,company):
             i.update(s_i_id)
             s_nat ={"s_nation":s_nation}
             i.update(s_nat)
+            price = frappe.db.sql("""select default_cost_rate_per_hour from `tabStaffing Cost` where staff_code=%s and status='Active'""",i.staff_code,as_dict=1)
+            if price:
+                rate = {"hourly_rate":price[0].default_cost_rate_per_hour}
+                i.update(rate)
+            else:
+                rate = {"hourly_rate":0}
+                i.update(rate)
         if i.item:
             i_name = frappe.db.get_value("Item",i.item,"item_name")
             item_name = {"item_name":i_name}
@@ -187,12 +209,6 @@ def get_item_details(name,company):
                 income_account = {"income_account":i_acc[0].income_account}
                 i.update(income_account)
 
-            price = frappe.db.sql("""select price_list_rate from `tabItem Price` where item_code=%s and price_list='Standard Selling' order by valid_from desc limit 1""",i.item,as_dict=1)
-            if price:
-                rate = {"price_list_rate":price[0].price_list_rate}
-                i.update(rate)
-            else:
-                rate = {"price_list_rate":0}
-                i.update(rate)
+            
 
     return items

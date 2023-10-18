@@ -12,7 +12,7 @@ frappe.ui.form.on("Purchase Invoice", {
                                 setters: {
                                     staffing_type: "",
                                     employee_name: null,
-                                    supplier_name: null,
+                                    supplier_name: frm.doc.supplier,
                                     start_date: null,
                                 },
                                 date_field: "start_date",
@@ -26,6 +26,20 @@ frappe.ui.form.on("Purchase Invoice", {
                             });
         }, __("Get Items From"), "btn-default");
 
+    },
+    hourly_invoice:function(frm){
+        
+        if(cur_frm.doc.hourly_invoice==0){
+            var items = cur_frm.doc.items
+            for(var i=0 ; i<items.length ; i++){
+                let r = items[i].custom_timesy_rate  
+                items[i].rate = r
+                items[i].amount = r * items[i].qty
+
+            }
+            cur_frm.refresh_field("items")
+
+        }
     },
     
     onload_post_render:function(frm){
@@ -49,6 +63,8 @@ frappe.ui.form.on("Purchase Invoice", {
                             t[i].custom_employee_name = data.employee_name
                             t[i].custom_staff_name = data.staff_name
                             t[i].custom_iqama_id = data.iqama_id
+                            t[i].custom_timesy = data.name
+                            t[i].custom_timesy_rate = data.total_costing_rate_before_deduction
                             t[i].custom_staff_iqama_id = data.staff_iqama_id
                             t[i].custom_nationality = data.nationality
                             t[i].custom_staff_nationality = data.staff_nationality
@@ -77,6 +93,8 @@ frappe.ui.form.on("Purchase Invoice", {
         }
         }
         console.log("yesssssssssss")
+
+        
         
 
 
@@ -89,6 +107,7 @@ frappe.ui.form.on("Purchase Invoice", {
 
 
 function add_items(selections, cur_frm) {
+    console.log("working add items")
     frappe.call({
             method: "sfs.doc_events.purchase_invoice.get_bulk_timesy",
             args: {
@@ -101,7 +120,9 @@ function add_items(selections, cur_frm) {
                 for(var x=0;x<r.message.length;x+=1){
                     cur_frm.add_child("items", {
                         "item_code":r.message[x].item,
-                        "item_name":r.message[x].item,
+                        "item_name":r.message[x].item_name,
+                        "uom":r.message[x].stock_uom,
+                        "custom_timesy":r.message[x].name,
                         "custom_reference_type":r.message[x].reference_type,
                         "custom_employee":r.message[x].employee_code,
                         "custom_staff":r.message[x].staff_code,           
@@ -116,6 +137,7 @@ function add_items(selections, cur_frm) {
                         "qty":1,
                         "rate":r.message[x].total_working_hour * r.message[x].hourly_rate,
                         "amount":r.message[x].total_working_hour * r.message[x].hourly_rate,
+                        "custom_timesy_rate":r.message[x].total_costing_rate_before_deduction,
                         "custom_type":"Regular"
                          })
                     cur_frm.refresh_field("items")

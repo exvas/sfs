@@ -85,6 +85,13 @@ def get_bulk_timesy(name):
         timesies += frappe.db.sql(""" SELECT * FROM `tabTimesy` WHERE name=%s""", j, as_dict=1)
         if timesies:
             for i in timesies:
+                if i.item:
+                    item = frappe.db.sql("""select * from `tabItem` where name=%s""",i.item,as_dict=1)
+                    i_name = {'item_name' : item[0].item_name}
+                    i_uom = {'stock_uom':item[0].stock_uom}
+                    i.update(i_name)
+                    i.update(i_uom)
+
                 if i.reference_type=="Staff":
                     staff_data  = frappe.db.sql("""select * from `tabStaff` where name=%s""",i.staff_code,as_dict=1)
                     s_id = {'staff_iqama_id' : staff_data[0].iqama_number}
