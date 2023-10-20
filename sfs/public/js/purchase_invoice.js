@@ -27,14 +27,32 @@ frappe.ui.form.on("Purchase Invoice", {
         }, __("Get Items From"), "btn-default");
 
     },
-    hourly_invoice:function(frm){
+    custom_hourly_invoice:function(frm){
         
-        if(cur_frm.doc.hourly_invoice==0){
+       
+        if(cur_frm.doc.custom_hourly_invoice==1){
             var items = cur_frm.doc.items
             for(var i=0 ; i<items.length ; i++){
-                let r = items[i].custom_timesy_rate  
+                let r = items[i].custom_hourly_rate*items[i].custom_total_working_hour
                 items[i].rate = r
                 items[i].amount = r * items[i].qty
+
+            }
+            cur_frm.refresh_field("items")
+        }
+        if(cur_frm.doc.custom_hourly_invoice==0){
+            var items = cur_frm.doc.items
+            for(var i=0 ; i<items.length ; i++){
+                let r = 0
+                r = items[i].price_list_rate
+                items[i].rate = r
+                if (r){
+                    items[i].amount = r * items[i].qty
+                }
+                else{
+                    items[i].amount =0
+
+                }
 
             }
             cur_frm.refresh_field("items")
@@ -103,8 +121,41 @@ frappe.ui.form.on("Purchase Invoice", {
     }
 })
 
+frappe.ui.form.on("Purchase Invoice Item", {
+    custom_total_working_hour:function(frm,cdt,cdn){
+        var d = locals[cdt][cdn]
+        if(cur_frm.doc.custom_hourly_invoice==1){
+            if (d.custom_hourly_rate){
+                d.rate = d.custom_total_working_hour * d.custom_hourly_rate
+                d.amount = (d.custom_hourly_rate * d.custom_total_working_hour)*d.qty
+            }
+            cur_frm.refresh_field("items")
+            total_cal(cur_frm)
 
+        }
+    },
+    custom_hourly_rate:function(frm,cdt,cdn){
+        var d = locals[cdt][cdn]
+        if(cur_frm.doc.custom_hourly_invoice==1){
+            if (d.custom_total_working_hour){
+                d.rate = d.custom_hourly_rate * d.custom_total_working_hour
+                d.amount = (d.custom_hourly_rate * d.custom_total_working_hour)*d.qty
+            }
+            cur_frm.refresh_field("items")
+            total_cal(cur_frm)
 
+        }
+    },
+
+})
+function total_cal(cur_frm){
+    var docs = cur_frm.doc.items
+    var total = 0
+    for (var i=0;i<docs.length;i++){
+        total += docs[i].amount 
+    }
+    cur_frm.set_value("total",total)
+} 
 
 function add_items(selections, cur_frm) {
     console.log("working add items")

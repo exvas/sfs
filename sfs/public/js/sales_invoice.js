@@ -120,6 +120,7 @@ frappe.ui.form.on("Sales Invoice", {
                         }
                     });
     }, __("Get Items From"), "btn-default");
+
     },
     refresh: function () {
         console.log('done')
@@ -138,6 +139,37 @@ frappe.ui.form.on("Sales Invoice", {
                 })
             }
         })
+
+
+        
+        cur_frm.add_custom_button(__('Fetch from Timesy'),
+				function() {
+                    var query_args = {
+                       query:"sfs.doc_events.sales_invoice.get_staffing",
+                        // filters: {doctype: cur_frm.doc.doctype}
+                    }
+					 var d = new frappe.ui.form.MultiSelectDialog({
+                                doctype: "Timesy",
+                                target: cur_frm,
+                                setters: {
+                                    staffing_type: "",
+                                    employee_name: null,
+                                    customer_name: cur_frm.doc.customer,
+                                    start_date: null,
+                                },
+                                date_field: "start_date",
+                                get_query() {
+                                    return query_args;
+                                },
+                                action(selections) {
+                                    add_items(selections, cur_frm)
+                                    d.dialog.hide()
+                                }
+                            });
+        }, __("Get Items From"), "btn-default");
+
+
+
         cur_frm.add_custom_button(__('Timesy'),
                 function() {
                     var query_args = {
@@ -187,9 +219,16 @@ frappe.ui.form.on("Sales Invoice", {
         if(cur_frm.doc.hourly_invoice==0){
             var items = cur_frm.doc.items
             for(var i=0 ; i<items.length ; i++){
-                let r = items[i].price_list_rate
+                let r =0
+                r = items[i].price_list_rate
                 items[i].rate = r
+                if (r){
                 items[i].amount = r * items[i].qty
+                }
+                else{
+                    items[i].amount =0
+
+                }
 
             }
             cur_frm.refresh_field("items")
@@ -387,4 +426,76 @@ function get_items(selections, cur_frm) {
             }
         }
     })
+}
+
+
+
+function add_items(selections, cur_frm) {
+    console.log("working add items")
+    frappe.call({
+            method: "sfs.doc_events.sales_invoice.get_bulk_timesy",
+            args: {
+                name: selections
+            },
+            callback: function (r) {
+                if (!cur_frm.doc.items[0].item_code){
+                    cur_frm.clear_table("items")
+                }
+                for(var x=0;x<r.message.length;x+=1){
+                    cur_frm.add_child("items", {
+                        "item_code":r.message[x].item,
+                        "item_name":r.message[x].item_name,
+                        "uom":r.message[x].stock_uom,
+                        "custom_timesy":r.message[x].name,
+                        "reference_type":r.message[x].reference_type,
+                        "employee":r.message[x].employee_code,
+                        "staff":r.message[x].staff_code,           
+                        "employee_name":r.message[x].employee_name,
+                        "staff_name":r.message[x].staff_name,
+                        "iqama_id":r.message[x].iqama_id,
+                        "staff_iqama_id":r.message[x].staff_iqama_id,
+                        "nationality":r.message[x].nationality,
+                        "staff_nationality":r.message[x].staff_nationality,
+                        "total_working_hour":r.message[x].total_working_hour,
+                        "hourly_rate":r.message[x].hourly_rate,
+                        "qty":1,
+                        "rate":r.message[x].total_working_hour * r.message[x].hourly_rate,
+                        "amount":r.message[x].total_working_hour * r.message[x].hourly_rate,
+                        "timesy_rate":r.message[x].total_costing_rate_before_deduction,
+                        "type":"Regular"
+                         })
+                    cur_frm.refresh_field("items")
+                    total_calculation(cur_frm);
+                   
+                }
+            }
+        })
+}
+
+
+
+function total_calculation(cur_frm){
+    var table = cur_frm.doc.items
+    var total = 0
+    var t_qty = 0
+    for (var i =0 ;i<table.length;i++){
+        if(table[i].amount){
+            total += table[i].amount
+            t_qty += table[i].qty
+            
+        }
+    }
+    cur_frm.set_value("total_qty",t_qty)
+    cur_frm.set_value("total",total)
+    if(cur_frm.doc.total_taxes_and_charges){
+        cur_frm.set_value("grand_total",total+cur_frm.doc.total_taxes_and_charges)
+        cur_frm.set_value("rounded_total",total+cur_frm.doc.total_taxes_and_charges)
+    }
+    else{
+        cur_frm.set_value("grand_total",total)
+        cur_frm.set_value("rounded_total",total)
+    }
+    
+
+
 }
