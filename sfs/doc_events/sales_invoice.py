@@ -84,6 +84,12 @@ def get_timesy(name):
 
     return timesies
 
+@frappe.whitelist()
+def get_price(item):
+    price = frappe.db.sql("""select price_list_rate from `tabItem Price` where item_code=%s order by valid_from desc limit 1""",item,as_dict=1)
+    if price:
+        item_price = price[0].price_list_rate
+    return item_price
 
 
 @frappe.whitelist()
@@ -135,6 +141,10 @@ def get_timesy_dates(name,company):
                 rate = {"hourly_rate":0}
                 i.update(rate)
         if i.item:
+            price = frappe.db.sql("""select price_list_rate from `tabItem Price` where item_code=%s order by valid_from desc limit 1""",i.item,as_dict=1)
+            if price:
+                p = {"price_list_rate":price[0].price_list_rate}
+                i.update(p)
             i_name = frappe.db.get_value("Item",i.item,"item_name")
             item_name = {"item_name":i_name}
             i.update(item_name)

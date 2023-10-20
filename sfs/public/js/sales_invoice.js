@@ -37,9 +37,9 @@ frappe.ui.form.on("Sales Invoice", {
                                 items[i].item_name=r.message[0].item_name,
                                 items[i].uom=r.message[0].uom,
                                 items[i].qty=1,
-                                items[i].rate=r.message[0].total_costing_rate_before_deduction,
+                                items[i].rate=r.message[0].price_list_rate,
                                 items[i].timesy_rate=r.message[0].total_costing_rate_before_deduction,
-                                items[i].amount=r.message[0].total_costing_rate_before_deduction*1,
+                                items[i].amount=r.message[0].price_list_rate*1,
                                 items[i].total_working_hour=r.message[0].total_working_hour,
                                 items[i].conversion_factor=1,
                                 items[i].description=r.message[0].description,
@@ -68,9 +68,9 @@ frappe.ui.form.on("Sales Invoice", {
                                 items[i].uom=r.message[0].uom,
                                 items[i].qty=1,
                                 items[i].hourly_rate = r.message[0].hourly_rate,
-                                // items[i].rate= r.message[0].price_list_rate * r.message[0].total_working_hour,
+                                items[i].rate=r.message[0].total_costing_rate_before_deduction,
                                 items[i].timesy_rate=r.message[0].total_costing_rate_before_deduction,
-                                // items[i].amount=r.message[0].price_list_rate * r.message[0].total_working_hour * items[i].qty,
+                                items[i].amount=r.message[0].total_costing_rate_before_deduction * items[i].qty,
                                 items[i].total_working_hour=r.message[0].total_working_hour,
                                 items[i].conversion_factor=1,
                                 items[i].description=r.message[0].description,
@@ -187,7 +187,7 @@ frappe.ui.form.on("Sales Invoice", {
         if(cur_frm.doc.hourly_invoice==0){
             var items = cur_frm.doc.items
             for(var i=0 ; i<items.length ; i++){
-                let r = items[i].timesy_rate
+                let r = items[i].price_list_rate
                 items[i].rate = r
                 items[i].amount = r * items[i].qty
 
@@ -200,6 +200,34 @@ frappe.ui.form.on("Sales Invoice", {
         frm.set_value("new_doc",1)
     }
     
+})
+
+frappe.ui.form.on("Sales Invoice Item", {
+    total_working_hour:function(frm,cdt,cdn){
+        var d = locals[cdt][cdn]
+        if(cur_frm.doc.hourly_invoice==1){
+            if (d.hourly_rate){
+                d.rate = d.total_working_hour * d.hourly_rate
+                d.amount = (d.hourly_rate * d.total_working_hour)*d.qty
+            }
+            cur_frm.refresh_field("items")
+            total_cal(cur_frm)
+
+        }
+    },
+    hourly_rate:function(frm,cdt,cdn){
+        var d = locals[cdt][cdn]
+        if(cur_frm.doc.hourly_invoice==1){
+            if (d.total_working_hour){
+                d.rate = d.hourly_rate * d.total_working_hour
+                d.amount = (d.hourly_rate * d.total_working_hour)*d.qty
+            }
+            cur_frm.refresh_field("items")
+            total_cal(cur_frm)
+
+        }
+    },
+
 })
 frappe.ui.form.on("Timesy List", {
     timesy_list_remove: function () {
@@ -220,7 +248,14 @@ frappe.ui.form.on("Timesy List", {
     }
 })
     
-    
+function total_cal(cur_frm){
+    var docs = cur_frm.doc.items
+    var total = 0
+    for (var i=0;i<docs.length;i++){
+        total += docs[i].amount 
+    }
+    cur_frm.set_value("total",total)
+} 
     
 function add_timesy(selections, cur_frm) {
         if(!cur_frm.doc.company){
