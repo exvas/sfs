@@ -198,8 +198,13 @@ def get_item_details(name,company):
             s_nat ={"s_nation":s_nation}
             i.update(s_nat)
             price = frappe.db.sql("""select default_cost_rate_per_hour from `tabStaffing Cost` where staff_code=%s and status='Active'""",i.staff_code,as_dict=1)
+            print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+            print(price)
+            
             if price:
                 rate = {"hourly_rate":price[0].default_cost_rate_per_hour}
+                print("my rate ")
+                print(rate)
                 i.update(rate)
             else:
                 rate = {"hourly_rate":0}
@@ -298,7 +303,7 @@ def get_bulk_timesy(name):
                     s_nation = {'staff_nationality':staff_data[0].nationality}
                     i.update(s_id)
                     i.update(s_nation)
-                    rate = frappe.db.get_value("Staffing Cost",{"staff_code":i.staff_code},"default_billing_rate_per_hour")
+                    rate = frappe.db.get_value("Staffing Cost",{"staff_code":i.staff_code,"status":'Active'},"default_cost_rate_per_hour")
                     r = {"hourly_rate":rate}
                     i.update(r)
 
@@ -306,6 +311,9 @@ def get_bulk_timesy(name):
                     employee_data  = frappe.db.sql("""select * from `tabEmployee` where name=%s""",i.employee_code,as_dict=1)
                     e_id = {'iqama_id' : employee_data[0].iqama_id}
                     e_nation = {'nationality':employee_data[0].nationality}
+                    rate = frappe.db.get_value("Staffing Cost",{"employee_code":i.employee_code,"status":'Active'},"default_cost_rate_per_hour")
+                    r = {"hourly_rate":rate}
+                    i.update(r)
                     i.update(e_id)
                     i.update(e_nation)
 
