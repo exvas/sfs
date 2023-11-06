@@ -144,6 +144,8 @@ frappe.ui.form.on("Sales Invoice", {
         
         cur_frm.add_custom_button(__('Fetch from Timesy'),
 				function() {
+                    console.log("hiiiii ranju")
+                    console.log(cur_frm.doc.customer_name)
                     var query_args = {
                        query:"sfs.doc_events.sales_invoice.get_staffing",
                         // filters: {doctype: cur_frm.doc.doctype}
@@ -154,7 +156,7 @@ frappe.ui.form.on("Sales Invoice", {
                                 setters: {
                                     staffing_type: "",
                                     employee_name: null,
-                                    customer_name: cur_frm.doc.customer,
+                                    customer_name: cur_frm.doc.customer_name,
                                     start_date: null,
                                 },
                                 date_field: "start_date",
@@ -175,7 +177,7 @@ frappe.ui.form.on("Sales Invoice", {
                     var query_args = {
                         query:"sfs.doc_events.sales_invoice.get_staffing",
                         filters: {
-                doctype: cur_frm.doc.doctype
+                doctype: cur_frm.doc.doctype,
                         }
                     }
                         var d = new frappe.ui.form.MultiSelectDialog({
@@ -442,9 +444,13 @@ function add_items(selections, cur_frm) {
                     cur_frm.clear_table("items")
                 }
                 for(var x=0;x<r.message.length;x+=1){
+                    console.log("super 999999999")
+                    console.log(r.message[x].description)
                     cur_frm.add_child("items", {
                         "item_code":r.message[x].item,
                         "item_name":r.message[x].item_name,
+                        "description":r.message[x].description,
+                        "income_account":r.message[x].income_account,
                         "uom":r.message[x].stock_uom,
                         "custom_timesy":r.message[x].name,
                         "reference_type":r.message[x].reference_type,

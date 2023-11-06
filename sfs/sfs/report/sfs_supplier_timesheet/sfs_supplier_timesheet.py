@@ -58,7 +58,7 @@ def execute(filters=None):
 					FROM `tab{1}` E 
 					INNER JOIN `tabTimesy` T ON {2} = E.name
 					INNER JOIN `tabStaffing Cost` SC ON SC.name = T.staffing_cost
-					WHERE MONTH(T.start_date) {3} and YEAR(T.start_date) = '{4}' {5}""".format(fields,type,inner_join_filter,final_months,filters.get("fiscal_year"),condition)
+					WHERE MONTH(T.end_date) {3} and YEAR(T.end_date) = '{4}' {5}""".format(fields,type,inner_join_filter,final_months,filters.get("fiscal_year"),condition)
 		print(query)
 		data += frappe.db.sql(query, as_dict=1)
 		total_amount = total_absent = total_absent_deduction = total_ded = 0
@@ -93,6 +93,8 @@ def execute(filters=None):
 			x['amount'] = x.default_billing_rate_per_hour * sum
 			x['absent'] = absent
 			x['total_absent_deduction_per_hour'] = absent * x.absent_deduction_per_hour
+			if x.total_billing_rate_deduction:
+				x['total_absent_deduction_per_hour'] = absent * x.absent_deduction_per_hour + x.total_billing_rate_deduction
 			x['ppe_deduction'] = x.ppe_deduction
 			x['net_total'] = x['amount'] - x['total_absent_deduction_per_hour']
 			x['date_format'] = date_format
@@ -151,6 +153,7 @@ def get_fields(type):
 	if type == "Employee":
 		fields = "T.employee_code as employee," \
 				 "T.employee_name as employee_staff_name," \
+				 "T.total_billing_rate_deduction," \
 				 "E.designation,T.name," \
 				 "SC.default_billing_rate_per_hour,T.ppe_deduction," \
 				 "SC.absent_deduction_per_hour"
@@ -158,6 +161,7 @@ def get_fields(type):
 	elif type == "Staff":
 		fields = "T.staff_code as employee," \
 				 "T.staff_name as employee_staff_name," \
+				 "T.total_billing_rate_deduction," \
 				 "E.designation,T.name,T.ppe_deduction," \
 				 "SC.default_billing_rate_per_hour," \
 				 "SC.absent_deduction_per_hour"

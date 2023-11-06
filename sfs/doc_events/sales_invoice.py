@@ -292,10 +292,15 @@ def get_bulk_timesy(name):
             for i in timesies:
                 if i.item:
                     item = frappe.db.sql("""select * from `tabItem` where name=%s""",i.item,as_dict=1)
+                    i_account = frappe.db.sql("""select income_account from `tabItem Default` where parent=%s and company=%s""",(i.item,i.company),as_dict=1)
                     i_name = {'item_name' : item[0].item_name}
                     i_uom = {'stock_uom':item[0].stock_uom}
+                    desc = {'description':item[0].description}
+                    account = {"income_account":i_account[0].income_account}
+                    i.update(desc)
                     i.update(i_name)
                     i.update(i_uom)
+                    i.update(account)
 
                 if i.reference_type=="Staff":
                     staff_data  = frappe.db.sql("""select * from `tabStaff` where name=%s""",i.staff_code,as_dict=1)
