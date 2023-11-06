@@ -102,7 +102,7 @@ def execute(filters=None):
 			total_amount += x['amount']
 			total_absent += x['total_absent_deduction_per_hour']
 			total_ded += x['total_ded']
-			total_absent_deduction += absent * x.absent_deduction_per_hour + x.ppe_deduction
+			total_absent_deduction += absent * x.absent_deduction_per_hour + x.ppe_deduction +x.total_billing_rate_deduction
 		if len(data) > 0:
 			print('total')
 			print(total_absent_deduction)
