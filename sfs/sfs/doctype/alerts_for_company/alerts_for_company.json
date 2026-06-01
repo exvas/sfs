@@ -146,7 +146,7 @@
   },
   {
    "fieldname": "vehicle_insurance_expiry_date",
-   "fieldtype": "Date",
+   "fieldtype": "Data",
    "label": "Vehicle Insurance Expiry Date"
   },
   {
