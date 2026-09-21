@@ -86,40 +86,6 @@ frappe.ui.form.on("Sales Invoice", {
             }
             
         }
-        cur_frm.add_custom_button(__('Timesy'),
-        function() {
-            var query_args = {
-                query:"sfs.doc_events.sales_invoice.get_staffing",
-                filters: {
-        doctype: cur_frm.doc.doctype
-                }
-            }
-                var d = new frappe.ui.form.MultiSelectDialog({
-                        doctype: "Timesy",
-                        target: cur_frm,
-                        setters: {
-                            staffing_type: "",
-                            customer_name: null,
-                            employee_name: null,
-                            start_date: null,
-                        },
-                        date_field: "start_date",
-                        get_query() {
-                            return query_args;
-                        },
-                        action(selections) {
-                            console.log(selections)
-                            console.log("sfs executed")
-                            add_timesy(selections, cur_frm)
-                            console.log("dates")
-                            
-                            // add_dates(selections,cur_frm)
-                            // console.log("items")
-                            // get_items(selections,cur_frm)
-                            d.dialog.hide()
-                        }
-                    });
-    }, __("Get Items From"), "btn-default");
 
     },
     refresh: function () {
@@ -142,13 +108,17 @@ frappe.ui.form.on("Sales Invoice", {
 
 
         
+        if (cur_frm.custom_buttons[__('Timesy')]) {
+            cur_frm.remove_custom_button(__('Timesy'), __("Get Items From"));
+        }
+
         cur_frm.add_custom_button(__('Fetch from Timesy'),
 				function() {
                     console.log("hiiiii ranju")
                     console.log(cur_frm.doc.customer_name)
                     var query_args = {
                        query:"sfs.doc_events.sales_invoice.get_staffing",
-                        // filters: {doctype: cur_frm.doc.doctype}
+                        filters: {doctype: cur_frm.doc.doctype}
                     }
 					 var d = new frappe.ui.form.MultiSelectDialog({
                                 doctype: "Timesy",
@@ -172,40 +142,6 @@ frappe.ui.form.on("Sales Invoice", {
 
 
 
-        cur_frm.add_custom_button(__('Timesy'),
-                function() {
-                    var query_args = {
-                        query:"sfs.doc_events.sales_invoice.get_staffing",
-                        filters: {
-                doctype: cur_frm.doc.doctype,
-                        }
-                    }
-                        var d = new frappe.ui.form.MultiSelectDialog({
-                                doctype: "Timesy",
-                                target: cur_frm,
-                                setters: {
-                                    staffing_type: "",
-                                    customer_name: null,
-                                    employee_name: null,
-                                    start_date: null,
-                                },
-                                date_field: "start_date",
-                                get_query() {
-                                    return query_args;
-                                },
-                                action(selections) {
-                                    console.log(selections)
-                                    console.log("sfs executed")
-                                    add_timesy(selections, cur_frm)
-                                    console.log("dates")
-                                    
-                                    add_dates(selections,cur_frm)
-                                    console.log("items")
-                                    get_items(selections,cur_frm)
-                                    d.dialog.hide()
-                                }
-                            });
-        }, __("Get Items From"), "btn-default");
     },
     hourly_invoice:function(frm){
         if(cur_frm.doc.hourly_invoice==1){
@@ -433,49 +369,82 @@ function get_items(selections, cur_frm) {
 
 
 function add_items(selections, cur_frm) {
-    console.log("working add items")
     frappe.call({
-            method: "sfs.doc_events.sales_invoice.get_bulk_timesy",
-            args: {
-                name: selections
-            },
-            callback: function (r) {
-                if (!cur_frm.doc.items[0].item_code){
-                    cur_frm.clear_table("items")
-                }
-                for(var x=0;x<r.message.length;x+=1){
-                    console.log("super 999999999")
-                    console.log(r.message[x].description)
-                    cur_frm.add_child("items", {
-                        "item_code":r.message[x].item,
-                        "item_name":r.message[x].item_name,
-                        "description":r.message[x].description,
-                        "income_account":r.message[x].income_account,
-                        "uom":r.message[x].stock_uom,
-                        "custom_timesy":r.message[x].name,
-                        "reference_type":r.message[x].reference_type,
-                        "employee":r.message[x].employee_code,
-                        "staff":r.message[x].staff_code,           
-                        "employee_name":r.message[x].employee_name,
-                        "staff_name":r.message[x].staff_name,
-                        "iqama_id":r.message[x].iqama_id,
-                        "staff_iqama_id":r.message[x].staff_iqama_id,
-                        "nationality":r.message[x].nationality,
-                        "staff_nationality":r.message[x].staff_nationality,
-                        "total_working_hour":r.message[x].total_working_hour,
-                        "hourly_rate":r.message[x].hourly_rate,
-                        "qty":1,
-                        "rate":r.message[x].total_working_hour * r.message[x].hourly_rate,
-                        "amount":r.message[x].total_working_hour * r.message[x].hourly_rate,
-                        "timesy_rate":r.message[x].total_costing_rate_before_deduction,
-                        "type":"Regular"
-                         })
-                    cur_frm.refresh_field("items")
-                    total_calculation(cur_frm);
-                   
-                }
+        method: "sfs.doc_events.sales_invoice.get_bulk_timesy",
+        args: {
+            name: selections
+        },
+        callback: function (r) {
+            if (!r.message || !r.message.length) return;
+
+            if (cur_frm.doc.items && cur_frm.doc.items.length && !cur_frm.doc.items[0].item_code) {
+                cur_frm.clear_table("items");
             }
-        })
+
+            var existing = (cur_frm.doc.timesy_list || []).map(function (t) { return t.timesy; });
+            var s_date = cur_frm.doc.s_date;
+            var e_date = cur_frm.doc.e_date;
+            var deduction = flt(cur_frm.doc.discount_amount);
+            var charge = flt(cur_frm.doc.additional_amount);
+
+            for (var x = 0; x < r.message.length; x += 1) {
+                var t = r.message[x];
+                if (existing.indexOf(t.name) !== -1) continue;
+                existing.push(t.name);
+
+                cur_frm.add_child("items", {
+                    "item_code": t.item,
+                    "item_name": t.item_name,
+                    "description": t.description,
+                    "income_account": t.income_account,
+                    "uom": t.stock_uom,
+                    "conversion_factor": 1,
+                    "custom_timesy": t.name,
+                    "reference_type": t.reference_type,
+                    "employee": t.employee_code,
+                    "staff": t.staff_code,
+                    "employee_name": t.employee_name,
+                    "staff_name": t.staff_name,
+                    "iqama_id": t.iqama_id,
+                    "staff_iqama_id": t.staff_iqama_id,
+                    "nationality": t.nationality,
+                    "staff_nationality": t.staff_nationality,
+                    "total_working_hour": t.total_working_hour,
+                    "hourly_rate": t.hourly_rate,
+                    "qty": 1,
+                    "rate": flt(t.total_working_hour) * flt(t.hourly_rate),
+                    "amount": flt(t.total_working_hour) * flt(t.hourly_rate),
+                    "timesy_rate": t.total_costing_rate_before_deduction,
+                    "type": "Regular"
+                });
+
+                cur_frm.add_child("timesy_list", {
+                    "timesy": t.name,
+                    "staff_name": t.reference_type === "Staff" ? t.staff_name : t.employee_name,
+                    "staffing_project": t.staffing_project,
+                    "total_costing_rate": t.total_costing_hour
+                });
+
+                if (!s_date || t.start_date < s_date) s_date = t.start_date;
+                if (!e_date || t.end_date > e_date) e_date = t.end_date;
+                deduction += flt(t.total_deduction);
+                charge += flt(t.charge_amount);
+            }
+
+            cur_frm.refresh_field("items");
+            cur_frm.refresh_field("timesy_list");
+            cur_frm.set_value("s_date", s_date);
+            cur_frm.set_value("e_date", e_date);
+            cur_frm.set_value("discount_amount", deduction);
+            cur_frm.set_value("additional_amount", charge);
+
+            var grand = 0;
+            (cur_frm.doc.timesy_list || []).forEach(function (t) { grand += flt(t.total_costing_rate); });
+            cur_frm.set_value("grand_costing_rate", grand);
+
+            total_calculation(cur_frm);
+        }
+    });
 }
 
 
